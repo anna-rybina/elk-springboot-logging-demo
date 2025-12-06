@@ -1,0 +1,8 @@
+spring:
+  application:
+    name: elk-logging-demo
+logging:
+  file:
+    path: logs
+  level:
+    com.github.annarybina: DEBUG

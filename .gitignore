@@ -1,0 +1,45 @@
+# Java
+*.class
+*.jar
+*.war
+target/
+build/
+
+# Maven
+pom.xml.*
+.mvn/wrapper/maven-wrapper.jar
+
+# IDE
+.idea/
+*.iml
+.classpath
+.project
+.settings/
+.vscode/
+*.code-workspace
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Логи
+logs/
+*.log
+app.json
+filebeat.json
+
+# ELK данные
+elasticsearch/data/
+kibana/data/
+logstash/data/
+
+# Docker
+docker-compose.override.yml
+.env
+.env.local
+
+# Временные файлы
+tmp/
+temp/
+*.tmp
+*~
