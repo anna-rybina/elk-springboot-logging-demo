@@ -1,14 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
 
-    <!-- Директория для логов -->
     <property name="LOG_PATH" value="logs"/>
 
-    <!-- Filebeat Appender (ОСНОВНОЙ для ELK) -->
+    <!-- Filebeat Appender -->
     <appender name="FILEBEAT" class="ch.qos.logback.core.FileAppender">
         <file>${LOG_PATH}/app.json</file>
         <encoder class="net.logstash.logback.encoder.LogstashEncoder">
-            <!-- Дополнительные поля для Elasticsearch -->
             <customFields>{"app":"elk-logging-demo","env":"development"}</customFields>
         </encoder>
     </appender>
@@ -16,17 +14,18 @@
     <!-- Консоль для дебага -->
     <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
+            <!-- ВАЖНО: правильный pattern -->
             <pattern>%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n</pattern>
         </encoder>
     </appender>
 
     <!-- Корневой логгер -->
     <root level="INFO">
-        <appender-ref ref="FILEBEAT"/>  <!-- ВКЛЮЧАЕМ filebeat appender -->
-        <appender-ref ref="CONSOLE"/>   <!-- Для просмотра в консоли -->
+        <appender-ref ref="FILEBEAT"/>
+        <appender-ref ref="CONSOLE"/>
     </root>
 
-    <!-- Логгер для твоего приложения -->
+    <!-- Логгер для нашего приложения -->
     <logger name="com.github.annarybina" level="DEBUG"/>
 
 </configuration>
