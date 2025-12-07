@@ -1,18 +1,60 @@
-version: '3.7'
 services:
-  elk:
-    image: sebp/elk
+  elasticsearch:
+    image: elasticsearch:7.17.0
+    container_name: elasticsearch
+    environment:
+      - discovery.type=single-node
+      - ES_JAVA_OPTS=-Xms512m -Xmx512m
+      - xpack.security.enabled=false
     ports:
-      - "5601:5601"  # kibana
-      - "9200:9200"  # elastic
-      - "5044:5044"  # logstash
+      - "9200:9200"
     volumes:
-      - elasticsearch-data:/var/lib/elasticsearch
+      - elasticsearch-data:/usr/share/elasticsearch/data
+    networks:
+      - elk-network
+
+  kibana:
+    image: kibana:7.17.0
+    container_name: kibana
+    ports:
+      - "5601:5601"
+    environment:
+      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+    networks:
+      - elk-network
+    depends_on:
+      - elasticsearch
+
+  logstash:
+    image: logstash:7.17.0
+    container_name: logstash
+    ports:
+      - "5044:5044"
+    environment:
+      - LS_JAVA_OPTS=-Xmx256m -Xms256m
+      - XPACK_MONITORING_ENABLED=false
+      - config.string=input { beats { port => 5044 } } output { elasticsearch { hosts => ["elasticsearch:9200"] index => "spring-logs-%{+YYYY.MM.dd}" } }
+    networks:
+      - elk-network
+    depends_on:
+      - elasticsearch
 
   filebeat:
     image: elastic/filebeat:7.17.0
+    container_name: filebeat
     volumes:
       - ./filebeat-config/filebeat.yml:/usr/share/filebeat/filebeat.yml:ro
       - ./logs:/usr/share/filebeat/logs:ro
+    networks:
+      - elk-network
     depends_on:
-      - elk
+      - logstash
+    environment:
+      - BEAT_STRICT_PERMS=false
+
+volumes:
+  elasticsearch-data:
+
+networks:
+  elk-network:
+    driver: bridge

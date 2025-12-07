@@ -8,13 +8,14 @@
         <file>${LOG_PATH}/app.json</file>
         <encoder class="net.logstash.logback.encoder.LogstashEncoder">
             <customFields>{"app":"elk-logging-demo","env":"development"}</customFields>
+            <timestampPattern>yyyy-MM-dd'T'HH:mm:ss.SSS'Z'</timestampPattern>
+            <timeZone>UTC</timeZone>
         </encoder>
     </appender>
 
     <!-- Консоль для дебага -->
     <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
-            <!-- ВАЖНО: правильный pattern -->
             <pattern>%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n</pattern>
         </encoder>
     </appender>
