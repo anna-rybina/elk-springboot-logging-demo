@@ -22,12 +22,6 @@ pom.xml.*
 .DS_Store
 Thumbs.db
 
-# Логи
-logs/
-*.log
-app.json
-filebeat.json
-
 # ELK данные
 elasticsearch/data/
 kibana/data/
